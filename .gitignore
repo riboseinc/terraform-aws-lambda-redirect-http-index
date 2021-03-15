@@ -7,7 +7,5 @@
 node_modules
 config/
 package-lock.json
-test/
 .terraform/
 terraform.*
-test

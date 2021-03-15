@@ -1,4 +1,4 @@
-import {Redirect} from "./redirect";
+import {RedirectHandler} from "./redirect-handler";
 import {CloudFrontRequestCallback, CloudFrontRequestEvent, CloudFrontRequestHandler, Context} from 'aws-lambda';
 
 exports.handler = async (event: CloudFrontRequestEvent, context: Context, callback: CloudFrontRequestCallback) => {
@@ -6,6 +6,6 @@ exports.handler = async (event: CloudFrontRequestEvent, context: Context, callba
         return callback("Not support for Response Event", null);
     }
 
-    new Redirect(event, context, callback);
-    return null;
+    const redirect = new RedirectHandler(event, context, callback);
+    return redirect.handleRequest();
 };

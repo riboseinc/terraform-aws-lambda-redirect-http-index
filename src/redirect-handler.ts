@@ -1,23 +1,16 @@
-import {
-    CloudFrontRequest,
-    CloudFrontRequestCallback,
-    CloudFrontRequestEvent,
-    CloudFrontResponseCallback,
-    CloudFrontResponseEvent,
-    Context
-} from 'aws-lambda';
-import {CloudFrontResponse} from "aws-lambda/common/cloudfront";
+import {CloudFrontRequest, CloudFrontRequestCallback, CloudFrontRequestEvent, Context} from 'aws-lambda';
 
 const pointsToFile = uri => /\/[^/]+\.[^/]+$/.test(uri);
 const hasTrailingSlash = uri => uri.endsWith('/');
 
-export class Redirect {
-    readonly request: CloudFrontRequest;
-    readonly eventType: "origin-request" | "origin-response" | "viewer-request" | "viewer-response";
-    readonly requestUri: string;
-    // private response: CloudFrontResponse;
+export class RedirectHandler {
+    private readonly request: CloudFrontRequest;
+    private readonly eventType: "origin-request" | "origin-response" | "viewer-request" | "viewer-response";
+    private readonly requestUri: string;
 
-    constructor(readonly event: CloudFrontRequestEvent, readonly context: Context, readonly callback: CloudFrontRequestCallback) {
+    constructor(private readonly event: CloudFrontRequestEvent,
+                private readonly context: Context,
+                private readonly callback: CloudFrontRequestCallback) {
         const cf = event.Records[0].cf;
         this.request = cf.request;
         // this.response = cf.response;
@@ -31,7 +24,7 @@ export class Redirect {
         this.requestUri = this.request.uri;
     }
 
-    async toHtml() {
+    async handleRequest() {
         if (!pointsToFile(this.requestUri)) {
             // Append ".html" or "index.html"
             this.request.uri = `${this.requestUri}${hasTrailingSlash(this.requestUri) ? "index.html":".html"}`
