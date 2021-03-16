@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 
-const bucket = process.env.BUCKET_NAME || 'isoreg-backup';
-const key = process.env.BUCKET_CSV_CONFIG_KEY || 'test.csv';
+const bucket = process.env.BUCKET_NAME;
+const key = process.env.BUCKET_CSV_CONFIG_KEY;
 
 // language=SQL format=false
 const SelectMaxTimestamp = `SELECT MAX(cast(lastUpdatedTimestamp as int)) FROM s3object`;
@@ -68,6 +68,10 @@ const parseS3QueryStream = async (data, fieldName) => {
 module.exports = async () => {
     const s3 = new AWS.S3();
     return new Promise((resolve, reject) => {
+        if (!bucket || !key) {
+            return reject(require('./no-ops-error'));
+        }
+
         s3.selectObjectContent(params(SelectMaxTimestamp)).promise()
             .then(data => parseS3QueryStream(data))
             .then(timestamp => s3.selectObjectContent(params(SelectRootDirByTimestamp(timestamp))).promise())
