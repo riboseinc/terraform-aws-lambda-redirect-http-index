@@ -30,8 +30,7 @@ resource "aws_lambda_function" "this" {
   publish = true
 
   environment {
-    BUCKET_NAME = var.bucket_name
-    BUCKET_CONFIG_KEY = var.bucket_config_key
+    variables = var.env
   }
 }
 
