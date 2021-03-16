@@ -1,8 +1,3 @@
-locals {
-  src = "${path.module}/src"
-  mainjs = "${local.src}/dist/main.js"
-}
-
 resource "aws_cloudwatch_log_group" "this" {
   name = "/aws/lambda/${var.name}"
   retention_in_days = 7
@@ -11,7 +6,7 @@ resource "aws_cloudwatch_log_group" "this" {
 data "archive_file" "this" {
   type        = "zip"
   output_path = "${path.module}/.archive.zip"
-  source_file  = local.mainjs
+  source_file  = "${path.module}/src/main.js"
 }
 
 resource "aws_lambda_function" "this" {
@@ -19,7 +14,7 @@ resource "aws_lambda_function" "this" {
     data.archive_file.this
   ]
 
-  description = "Redirect function"
+  description = "Basic HTTP authentication module/function"
   role        = aws_iam_role.this.arn
   runtime     = "nodejs12.x"
 

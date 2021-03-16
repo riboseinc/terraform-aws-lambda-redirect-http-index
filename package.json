@@ -1,29 +1,8 @@
 {
   "name": "terraform-aws-lambda-redirect-http-index",
-  "scripts": {
-    "build": "npx webpack --mode production --config webpack.config.js"
-  },
   "devDependencies": {
-    "@types/aws-lambda": "^8.10.72",
-    "@types/aws-sdk": "^2.7.0",
-    "@types/buffers": "^0.1.31",
-    "@types/chai": "^4.2.15",
-    "@types/chai-as-promised": "^7.1.3",
-    "@types/node": "^14.14.33",
     "aws-lambda": "^1.0.6",
-    "aws-sdk": "^2.861.0",
-    "chai": "^4.3.3",
-    "chai-as-promised": "^7.1.1",
-    "mocha": "^8.3.1",
-    "mocha-typescript": "^1.1.17",
-    "s3-ls": "^3.0.0",
-    "ts-loader": "^8.0.17",
-    "ts-mocha": "^8.0.0",
-    "ts-node": "^9.1.1",
-    "tslint": "^6.1.3",
-    "typescript": "^4.2.3",
-    "webpack": "^5.24.4",
-    "webpack-cli": "^4.5.0"
+    "aws-sdk": "^2.861.0"
   },
   "engines": {
     "node": "^12"
