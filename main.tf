@@ -14,7 +14,7 @@ resource "aws_lambda_function" "this" {
     data.archive_file.this
   ]
 
-  description = "Basic HTTP authentication module/function"
+  description = "terraform-aws-lambda-redirect-http-index"
   role        = aws_iam_role.this.arn
   runtime     = "nodejs12.x"
 
