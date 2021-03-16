@@ -15,16 +15,15 @@ exports.handler = async (event, context, callback) => {
     // zero downtime deployment, https://github.com/riboseinc/terraform-aws-s3-cloudfront-website/issues/30
     const rootDir = await require('./s3-root')();
 
+    //override rootDir
+    if (!olduri.startsWith(rootDir)) {
+        olduri = rootDir + olduri;
+    }
+
     const qs = request.querystring;
 
     // If needed, redirect to the same URI with trailing slash, keeping query string
     if (needsTrailingSlash(olduri)) {
-
-        //override rootDir
-        if (!olduri.startsWith(rootDir)) {
-            olduri = rootDir + olduri;
-        }
-
         return callback(null, {
             body: '',
             status: '302',
@@ -39,14 +38,11 @@ exports.handler = async (event, context, callback) => {
     }
 
     // Match any '/' that occurs at the end of a URI, replace it with a default index
-    let newuri = olduri.replace(/\/$/, '\/index.html');
-    if (!newuri.startsWith(rootDir)) {
-        newuri = rootDir + newuri;
-    }
+    const newuri = olduri.replace(/\/$/, '\/index.html');
 
     // Useful for test runs
-    console.log("Old URI: " + olduri);
-    console.log("New URI: " + newuri);
+    // console.log("Old URI: " + olduri);
+    // console.log("New URI: " + newuri);
 
     // Replace the received URI with the URI that includes the index page
     request.uri = newuri;
