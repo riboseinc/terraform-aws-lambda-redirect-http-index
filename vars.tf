@@ -11,3 +11,10 @@ variable "fn_memory_size" {
   default = 128
 }
 
+variable "bucket_name" {
+  default = ""
+}
+
+variable "bucket_config_key" {
+  default = ""
+}

@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 
 const bucket = process.env.BUCKET_NAME;
-const key = process.env.BUCKET_CSV_CONFIG_KEY;
+const key = process.env.BUCKET_CONFIG_KEY;
 
 // const bucket = process.env.BUCKET_NAME || 'isoreg-backup';
 // const key = process.env.BUCKET_CSV_CONFIG_KEY || 'test.csv';

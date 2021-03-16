@@ -6,7 +6,7 @@ Lambda@Edge function that redirects HTTP path to index.html
 To support [zero](https://github.com/riboseinc/terraform-aws-s3-cloudfront-website/issues/30) downtime deployment,
 required env as bellow
 - `BUCKET_NAME` (optional): bucket name to set CSV Config File
-- `BUCKET_CSV_CONFIG_KEY` (optional): csv config bucket object, sample as bellow
+- `BUCKET_CONFIG_KEY` (optional): csv config bucket object, sample as bellow
 ```csv
 lastUpdatedTimestamp,rootDir
 1615877411,dir1
