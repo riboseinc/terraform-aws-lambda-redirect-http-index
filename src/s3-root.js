@@ -3,8 +3,13 @@ const AWS = require('aws-sdk');
 const bucket = process.env.BUCKET_NAME;
 const key = process.env.BUCKET_CSV_CONFIG_KEY;
 
+// const bucket = process.env.BUCKET_NAME || 'isoreg-backup';
+// const key = process.env.BUCKET_CSV_CONFIG_KEY || 'test.csv';
+
+
 // language=SQL format=false
-const SelectMaxTimestamp = `SELECT MAX(cast(lastUpdatedTimestamp as int)) FROM s3object`;
+const SelectMaxTimestamp = `SELECT MAX(cast(lastUpdatedTimestamp as int))
+                            FROM s3object`;
 const SelectRootDirByTimestamp = (lastTimestamp) => {
     return `SELECT rootDir FROM s3object s WHERE cast(lastUpdatedTimestamp as int) = ${lastTimestamp}`
 }
@@ -65,21 +70,25 @@ const parseS3QueryStream = async (data, fieldName) => {
     });
 }
 
+const DefaultRoot = "/";
+
 module.exports = async () => {
     const s3 = new AWS.S3();
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
         if (!bucket || !key) {
-            return reject(require('./no-ops-error'));
+            return resolve(DefaultRoot);
         }
 
         s3.selectObjectContent(params(SelectMaxTimestamp)).promise()
             .then(data => parseS3QueryStream(data))
             .then(timestamp => s3.selectObjectContent(params(SelectRootDirByTimestamp(timestamp))).promise())
             .then(data => parseS3QueryStream(data, 'rootDir'))
-            .then(rootDir => resolve(rootDir))
+            .then(rootDir => {
+                const root = "/" + rootDir.split("/").filter(s => s.length > 0).join("/");
+                resolve(root);
+            })
             .catch(e => {
-                console.error(e);
-                reject(e);
+                resolve(DefaultRoot);
             });
     });
 }
