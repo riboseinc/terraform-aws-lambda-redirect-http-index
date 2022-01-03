@@ -1,0 +1,10 @@
+{
+  "name": "terraform-aws-lambda-redirect-http-index",
+  "devDependencies": {
+    "aws-lambda": "^1.0.6",
+    "aws-sdk": "^2.861.0"
+  },
+  "engines": {
+    "node": "^12"
+  }
+}
